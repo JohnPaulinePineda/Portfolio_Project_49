@@ -2,7 +2,7 @@
 # Supervised Learning : Comparing Optimization Algorithms in Parameter Updates and Loss Function Minimization for Neural Network Classification 
 
 ***
-### John Pauline Pineda <br> <br> *March 25, 2024*
+### John Pauline Pineda <br> <br> *March 30, 2024*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -5462,48 +5462,306 @@ y_values = np.where(cancer_rate_premodelling['CANRAT'] == 'High', 1, 0)
 
 
 ```python
-
+##################################
+# Defining the neural network architecture
+##################################
+input_dim = 2
+hidden_dims = [5, 5, 5]
+output_dim = 2
 ```
 
 
 ```python
-
+##################################
+# Initializing model weights and biases
+##################################
+params = {}
+np.random.seed(88888)
+params['W1'] = np.random.randn(input_dim, hidden_dims[0])
+params['b1'] = np.zeros(hidden_dims[0])
+params['W2'] = np.random.randn(hidden_dims[0], hidden_dims[1])
+params['b2'] = np.zeros(hidden_dims[1])
+params['W3'] = np.random.randn(hidden_dims[1], hidden_dims[2])
+params['b3'] = np.zeros(hidden_dims[2])
+params['W4'] = np.random.randn(hidden_dims[2], output_dim)
+params['b4'] = np.zeros(output_dim)
 ```
 
 
 ```python
-
+##################################
+# Defining the activation function (ReLU)
+##################################
+def relu(x):
+    return np.maximum(0, x)
 ```
 
 
 ```python
-
+##################################
+# Defining the Softmax function
+##################################
+def softmax(x):
+    exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+    return exp_x / np.sum(exp_x, axis=1, keepdims=True)
 ```
 
 
 ```python
-
+##################################
+# Defining the Forward propagation algorithm
+##################################
+def forward(X, params):
+    Z1 = np.dot(X, params['W1']) + params['b1']
+    A1 = relu(Z1)
+    Z2 = np.dot(A1, params['W2']) + params['b2']
+    A2 = relu(Z2)
+    Z3 = np.dot(A2, params['W3']) + params['b3']
+    A3 = relu(Z3)
+    Z4 = np.dot(A3, params['W4']) + params['b4']
+    A4 = softmax(Z4)
+    return A4, {'Z1': Z1, 'A1': A1, 'Z2': Z2, 'A2': A2, 'Z3': Z3, 'A3': A3, 'Z4': Z4, 'A4': A4}
 ```
 
 
 ```python
-
+##################################
+# Defining the Cross-entropy loss
+##################################
+def cross_entropy_loss(y_pred, y_true):
+    m = y_true.shape[0]
+    log_likelihood = -np.log(y_pred[range(m), y_true])
+    loss = np.sum(log_likelihood) / m
+    return loss
 ```
 
 
 ```python
+##################################
+# Defining the Backpropagation algorithm
+##################################
+def backward(X, y_true, params, cache):
+    m = y_true.shape[0]
+    dZ4 = cache['A4'] - np.eye(output_dim)[y_true]
+    dW4 = np.dot(cache['A3'].T, dZ4) / m
+    db4 = np.sum(dZ4, axis=0) / m
+    dA3 = np.dot(dZ4, params['W4'].T)
+    dZ3 = dA3 * (cache['Z3'] > 0)
+    dW3 = np.dot(cache['A2'].T, dZ3) / m
+    db3 = np.sum(dZ3, axis=0) / m
+    dA2 = np.dot(dZ3, params['W3'].T)
+    dZ2 = dA2 * (cache['Z2'] > 0)
+    dW2 = np.dot(cache['A1'].T, dZ2) / m
+    db2 = np.sum(dZ2, axis=0) / m
+    dA1 = np.dot(dZ2, params['W2'].T)
+    dZ1 = dA1 * (cache['Z1'] > 0)
+    dW1 = np.dot(X.T, dZ1) / m
+    db1 = np.sum(dZ1, axis=0) / m
 
+    gradients = {'dW1': dW1, 'db1': db1, 'dW2': dW2, 'db2': db2, 'dW3': dW3, 'db3': db3, 'dW4': dW4, 'db4': db4}
+    return gradients
 ```
 
 
 ```python
-
+##################################
+# Defining the function to implement
+# Stochastic Gradient Descent Optimization
+##################################
+def sgd(params, gradients, learning_rate):
+    for param_name in params:
+        params[param_name] -= learning_rate * gradients['d' + param_name]
 ```
 
 
 ```python
+##################################
+# Defining the function to implement
+# model training
+##################################
+def train(X, y, params, epochs, learning_rate, optimizer):
+    costs = []
+    accuracies = []
+    for epoch in range(epochs):
+        # Performing forward pass
+        y_pred, cache = forward(X, params)
 
+        # Computing loss
+        loss = cross_entropy_loss(y_pred, y)
+        costs.append(loss)
+
+        # Computing accuracy
+        accuracy = np.mean(np.argmax(y_pred, axis=1) == y)
+        accuracies.append(accuracy)
+
+        # Performing backpropagation
+        gradients = backward(X, y, params, cache)
+
+        # Updating the parameters using the specified optimizer
+        if optimizer == 'SGD':
+            sgd(params, gradients, learning_rate)
+        elif optimizer == 'ADAM':
+            adam(params, gradients, learning_rate)
+        elif optimizer == 'ADAGRAD':
+            adagrad(params, gradients, learning_rate)
+        elif optimizer == 'ADADELTA':
+            adadelta(params, gradients)
+        elif optimizer == 'LION':
+            lion(params, gradients, learning_rate)
+        elif optimizer == 'RMSPROP':
+            rmsprop(params, gradients, learning_rate)
+
+        # Printing model iteration progress
+        if epoch % 100 == 0:
+            print(f'Epoch {epoch}: Loss={loss}, Accuracy={accuracy}')
+
+    return costs, accuracies
 ```
+
+
+```python
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
+```
+
+
+```python
+##################################
+# Implementing the method on
+# Stochastic Gradient Descent Optimization
+##################################
+optimizers = ['SGD']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies    
+```
+
+    Epoch 0: Loss=0.977656026481093, Accuracy=0.5214723926380368
+    Epoch 100: Loss=0.33270037676565895, Accuracy=0.8895705521472392
+    Epoch 200: Loss=0.26263234980367245, Accuracy=0.901840490797546
+    Epoch 300: Loss=0.23435760093994618, Accuracy=0.901840490797546
+    Epoch 400: Loss=0.21806821157745299, Accuracy=0.9079754601226994
+    Epoch 500: Loss=0.2074050285456089, Accuracy=0.9263803680981595
+    Epoch 600: Loss=0.2001146407114158, Accuracy=0.9263803680981595
+    Epoch 700: Loss=0.1949784687584053, Accuracy=0.9263803680981595
+    Epoch 800: Loss=0.1914926476761292, Accuracy=0.9263803680981595
+    Epoch 900: Loss=0.188994671488959, Accuracy=0.9263803680981595
+    Epoch 1000: Loss=0.18713438309683142, Accuracy=0.9263803680981595
+    
+
+
+```python
+##################################
+# Plotting the cost against iterations for
+# Stochastic Gradient Descent Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('SGD Optimization: Cost Function by Iteration')
+plt.ylim(-0.05, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
+```
+
+
+    
+![png](output_180_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the classification accuracy against iterations for
+# Stochastic Gradient Descent Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('SGD Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
+```
+
+
+    
+![png](output_181_0.png)
+    
+
+
+
+```python
+##################################
+# Gathering the final accuracy and cost values for 
+# Stochastic Gradient Descent Optimization 
+##################################
+SGD_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+SGD_values = pd.DataFrame([accuracies[-1],costs[-1]])
+SGD_method = pd.DataFrame(["SGD"]*2)
+SGD_summary = pd.concat([SGD_metrics, 
+                         SGD_values,
+                         SGD_method], axis=1)
+SGD_summary.columns = ['Metric', 'Value', 'Method']
+SGD_summary.reset_index(inplace=True, drop=True)
+display(SGD_summary)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>SGD</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.187134</td>
+      <td>SGD</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 ### 1.6.3 Adaptive Moment Estimation Optimization <a class="anchor" id="1.6.3"></a>
 
