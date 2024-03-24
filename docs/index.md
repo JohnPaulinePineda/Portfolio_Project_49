@@ -5640,7 +5640,7 @@ for optimizer in optimizers:
     params_copy = params.copy()
     costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
     all_costs[optimizer] = costs
-    all_accuracies[optimizer] = accuracies    
+    all_accuracies[optimizer] = accuracies
 ```
 
     Epoch 0: Loss=0.977656026481093, Accuracy=0.5214723926380368
@@ -5668,7 +5668,7 @@ for optimizer in optimizers:
 plt.xlabel('Iterations')
 plt.ylabel('Cost')
 plt.title('SGD Optimization: Cost Function by Iteration')
-plt.ylim(-0.05, 1.00)
+plt.ylim(0.15, 0.30)
 plt.xlim(-50,1000)
 plt.legend([], [], frameon=False)
 plt.show()
@@ -5774,48 +5774,169 @@ display(SGD_summary)
 
 
 ```python
+##################################
+# Defining the function to implement
+# Adaptive Moment Estimation Optimization
+##################################
+def adam(params, gradients, learning_rate, m=None, v=None, beta1=0.9, beta2=0.999, eps=1e-8, t=0):
+    if m is None:
+        m = {k: np.zeros_like(v) for k, v in params.items()}
+    if v is None:
+        v = {k: np.zeros_like(v) for k, v in params.items()}
 
+    t += 1
+    for param_name in params:
+        m[param_name] = beta1 * m[param_name] + (1 - beta1) * gradients['d' + param_name]
+        v[param_name] = beta2 * v[param_name] + (1 - beta2) * (gradients['d' + param_name] ** 2)
+        m_hat = m[param_name] / (1 - beta1 ** t)
+        v_hat = v[param_name] / (1 - beta2 ** t)
+        params[param_name] -= learning_rate * m_hat / (np.sqrt(v_hat) + eps)
 ```
 
 
 ```python
-
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
 ```
 
 
 ```python
-
+##################################
+# Implementing the method on
+# Adaptive Moment Estimation Optimization
+##################################
+optimizers = ['ADAM']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies
 ```
+
+    Epoch 0: Loss=0.18711788665783202, Accuracy=0.9263803680981595
+    Epoch 100: Loss=0.18001254333263383, Accuracy=0.9141104294478528
+    Epoch 200: Loss=0.17884340079313124, Accuracy=0.9141104294478528
+    Epoch 300: Loss=0.17809955980988298, Accuracy=0.9141104294478528
+    Epoch 400: Loss=0.17764474833280822, Accuracy=0.9141104294478528
+    Epoch 500: Loss=0.17731162147743887, Accuracy=0.9141104294478528
+    Epoch 600: Loss=0.17706218501973514, Accuracy=0.9141104294478528
+    Epoch 700: Loss=0.17687868107722898, Accuracy=0.9141104294478528
+    Epoch 800: Loss=0.17674860655817856, Accuracy=0.9141104294478528
+    Epoch 900: Loss=0.17669745796295797, Accuracy=0.9141104294478528
+    Epoch 1000: Loss=0.17663295512555588, Accuracy=0.9141104294478528
+    
 
 
 ```python
-
+##################################
+# Plotting the cost against iterations for
+# Adaptive Moment Estimation Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('ADAM Optimization: Cost Function by Iteration')
+plt.ylim(0.15, 0.30)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_187_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Plotting the classification accuracy against iterations for
+# Adaptive Moment Estimation Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('ADAM Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_188_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Gathering the final accuracy and cost values for 
+# Adaptive Moment Estimation Optimization
+##################################
+ADAM_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+ADAM_values = pd.DataFrame([accuracies[-1],costs[-1]])
+ADAM_method = pd.DataFrame(["ADAM"]*2)
+ADAM_summary = pd.concat([ADAM_metrics, 
+                         ADAM_values,
+                         ADAM_method], axis=1)
+ADAM_summary.columns = ['Metric', 'Value', 'Method']
+ADAM_summary.reset_index(inplace=True, drop=True)
+display(ADAM_summary)
 ```
 
 
-```python
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-```
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.914110</td>
+      <td>ADAM</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.176633</td>
+      <td>ADAM</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-```python
-
-```
-
-
-```python
-
-```
 
 ### 1.6.4 Adaptive Gradient Algorithm Optimization <a class="anchor" id="1.6.4"></a>
 
@@ -5828,48 +5949,163 @@ display(SGD_summary)
 
 
 ```python
-   
+##################################
+# Defining the function to implement
+# Adaptive Gradient Algorithm Optimization
+##################################
+def adagrad(params, gradients, learning_rate, cache=None, eps=1e-8):
+    if cache is None:
+        cache = {key: np.zeros_like(value) for key, value in params.items()}
+    
+    for key in params.keys():
+        cache[key] += gradients['d' + key] ** 2
+        params[key] -= learning_rate * gradients['d' + key] / (np.sqrt(cache[key]) + eps)   
 ```
 
 
 ```python
-
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
 ```
 
 
 ```python
-
+##################################
+# Implementing the method on
+# Adaptive Gradient Algorithm Optimization
+##################################
+optimizers = ['ADAGRAD']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies
 ```
+
+    Epoch 0: Loss=0.17255033561236358, Accuracy=0.9263803680981595
+    Epoch 100: Loss=0.17225880365181617, Accuracy=0.9263803680981595
+    Epoch 200: Loss=0.1721480527654002, Accuracy=0.9263803680981595
+    Epoch 300: Loss=0.17214368549141815, Accuracy=0.9263803680981595
+    Epoch 400: Loss=0.17213930321391052, Accuracy=0.9263803680981595
+    Epoch 500: Loss=0.17213491306759807, Accuracy=0.9263803680981595
+    Epoch 600: Loss=0.17213051665091217, Accuracy=0.9263803680981595
+    Epoch 700: Loss=0.17212611430185815, Accuracy=0.9263803680981595
+    Epoch 800: Loss=0.17212170607483865, Accuracy=0.9263803680981595
+    Epoch 900: Loss=0.17211729196073022, Accuracy=0.9263803680981595
+    Epoch 1000: Loss=0.17211287193611693, Accuracy=0.9263803680981595
+    
 
 
 ```python
-
+##################################
+# Plotting the cost against iterations for
+# Adaptive Gradient Algorithm Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('ADAGRAD Optimization: Cost Function by Iteration')
+plt.ylim(0.15, 0.30)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_194_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Plotting the classification accuracy against iterations for
+# Adaptive Gradient Algorithm Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('ADAGRAD Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_195_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Gathering the final accuracy and cost values for 
+# Adaptive Gradient Algorithm Optimization
+##################################
+ADAGRAD_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+ADAGRAD_values = pd.DataFrame([accuracies[-1],costs[-1]])
+ADAGRAD_method = pd.DataFrame(["ADAGRAD"]*2)
+ADAGRAD_summary = pd.concat([ADAGRAD_metrics, 
+                         ADAGRAD_values,
+                         ADAGRAD_method], axis=1)
+ADAGRAD_summary.columns = ['Metric', 'Value', 'Method']
+ADAGRAD_summary.reset_index(inplace=True, drop=True)
+display(ADAGRAD_summary)
 ```
 
 
-```python
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-```
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>ADAGRAD</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.172113</td>
+      <td>ADAGRAD</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-```python
-
-```
-
-
-```python
-
-```
 
 ### 1.6.5 AdaDelta Optimization <a class="anchor" id="1.6.5"></a>
 
@@ -5882,48 +6118,166 @@ display(SGD_summary)
 
 
 ```python
-
+##################################
+# Defining the function to implement
+# AdaDelta Optimization 
+##################################
+def adadelta(params, gradients, cache=None, rho=0.9, eps=1e-8):
+    if cache is None:
+        cache = {key: np.zeros_like(value) for key, value in params.items()}
+    delta = {key: np.zeros_like(value) for key, value in params.items()}
+    
+    for key in params.keys():
+        cache[key] = rho * cache[key] + (1 - rho) * (gradients['d' + key] ** 2)
+        delta[key] = -np.sqrt(delta[key] + eps) * gradients['d' + key] / np.sqrt(cache[key] + eps)
+        params[key] += delta[key]
+        delta[key] = rho * delta[key] + (1 - rho) * (delta[key] ** 2)
 ```
 
 
 ```python
-
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
 ```
 
 
 ```python
-
+##################################
+# Implementing the method on
+# AdaDelta Optimization
+##################################
+optimizers = ['ADADELTA']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies
 ```
+
+    Epoch 0: Loss=0.17653394513381784, Accuracy=0.9141104294478528
+    Epoch 100: Loss=0.16879310577636336, Accuracy=0.9263803680981595
+    Epoch 200: Loss=0.16724377618147862, Accuracy=0.9263803680981595
+    Epoch 300: Loss=0.165951313967353, Accuracy=0.9263803680981595
+    Epoch 400: Loss=0.16465897862561643, Accuracy=0.9263803680981595
+    Epoch 500: Loss=0.16365317756183798, Accuracy=0.9263803680981595
+    Epoch 600: Loss=0.16277671497605545, Accuracy=0.9263803680981595
+    Epoch 700: Loss=0.16156332334644716, Accuracy=0.9263803680981595
+    Epoch 800: Loss=0.16044848109322685, Accuracy=0.9263803680981595
+    Epoch 900: Loss=0.15932663270830294, Accuracy=0.9263803680981595
+    Epoch 1000: Loss=0.15831221856929265, Accuracy=0.9263803680981595
+    
 
 
 ```python
-
+##################################
+# Plotting the cost against iterations for
+# AdaDelta Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('ADADELTA Optimization: Cost Function by Iteration')
+plt.ylim(0.15, 0.30)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_201_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Plotting the classification accuracy against iterations for
+# AdaDelta Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('ADADELTA Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_202_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Gathering the final accuracy and cost values for 
+# AdaDelta Optimization
+##################################
+ADADELTA_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+ADADELTA_values = pd.DataFrame([accuracies[-1],costs[-1]])
+ADADELTA_method = pd.DataFrame(["ADADELTA"]*2)
+ADADELTA_summary = pd.concat([ADADELTA_metrics, 
+                         ADADELTA_values,
+                         ADADELTA_method], axis=1)
+ADADELTA_summary.columns = ['Metric', 'Value', 'Method']
+ADADELTA_summary.reset_index(inplace=True, drop=True)
+display(ADADELTA_summary)
 ```
 
 
-```python
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-```
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.926380</td>
+      <td>ADADELTA</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.158312</td>
+      <td>ADADELTA</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-```python
-
-```
-
-
-```python
-
-```
 
 ### 1.6.6 Layer-wise Optimized Non-convex Optimization <a class="anchor" id="1.6.6"></a>
 
@@ -5936,48 +6290,167 @@ display(SGD_summary)
 
 
 ```python
-
+##################################
+# Defining the function to implement
+# Layer-wise Optimized Non-convex Optimization
+##################################
+def lion(params, gradients, learning_rate, z=None, r=None, gamma=0.999, eps=1e-8):
+    if z is None:
+        z = {key: np.zeros_like(value) for key, value in params.items()}
+    if r is None:
+        r = {key: np.zeros_like(value) for key, value in params.items()}
+    
+    for key in params.keys():
+        z[key] = gamma * z[key] + (1 - gamma) * gradients['d' + key]
+        r[key] = gamma * r[key] + (1 - gamma) * (gradients['d' + key] ** 2)
+        delta = - learning_rate * z[key] / np.sqrt(r[key] + eps)
+        params[key] += delta
 ```
 
 
 ```python
-
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
 ```
 
 
 ```python
-
+##################################
+# Implementing the method on
+# Layer-wise Optimized Non-convex Optimization
+##################################
+optimizers = ['LION']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies
 ```
+
+    Epoch 0: Loss=0.15830151628894845, Accuracy=0.9263803680981595
+    Epoch 100: Loss=0.15764517713374526, Accuracy=0.9263803680981595
+    Epoch 200: Loss=0.15695744489638758, Accuracy=0.9263803680981595
+    Epoch 300: Loss=0.15627166762892516, Accuracy=0.9263803680981595
+    Epoch 400: Loss=0.15561303244310098, Accuracy=0.9263803680981595
+    Epoch 500: Loss=0.15472009586203717, Accuracy=0.9263803680981595
+    Epoch 600: Loss=0.15388359677979635, Accuracy=0.9263803680981595
+    Epoch 700: Loss=0.15307060515557244, Accuracy=0.9263803680981595
+    Epoch 800: Loss=0.152279697937234, Accuracy=0.9263803680981595
+    Epoch 900: Loss=0.15145047879884138, Accuracy=0.9263803680981595
+    Epoch 1000: Loss=0.15060131716040875, Accuracy=0.9325153374233128
+    
 
 
 ```python
-
+##################################
+# Plotting the cost against iterations for
+# Layer-wise Optimized Non-convex Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('LION Optimization: Cost Function by Iteration')
+plt.ylim(0.15, 0.30)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_208_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Plotting the classification accuracy against iterations for
+# Layer-wise Optimized Non-convex Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('LION Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
 ```
+
+
+    
+![png](output_209_0.png)
+    
+
 
 
 ```python
-
+##################################
+# Gathering the final accuracy and cost values for 
+# Layer-wise Optimized Non-convex Optimization
+##################################
+LION_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+LION_values = pd.DataFrame([accuracies[-1],costs[-1]])
+LION_method = pd.DataFrame(["LION"]*2)
+LION_summary = pd.concat([LION_metrics, 
+                         LION_values,
+                         LION_method], axis=1)
+LION_summary.columns = ['Metric', 'Value', 'Method']
+LION_summary.reset_index(inplace=True, drop=True)
+display(LION_summary)
 ```
 
 
-```python
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-```
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.932515</td>
+      <td>LION</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.150601</td>
+      <td>LION</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-```python
-
-```
-
-
-```python
-
-```
 
 ### 1.6.7 Root Mean Square Propagation Optimization <a class="anchor" id="1.6.7"></a>
 
@@ -5990,48 +6463,168 @@ display(SGD_summary)
 
 
 ```python
+##################################
+# Defining the function to implement
+# Root Mean Square Propagation Optimization
+##################################
+def rmsprop(params, gradients, learning_rate, cache=None, beta=0.9, eps=1e-8):
+    if cache is None:
+        cache = {k: np.zeros_like(v) for k, v in params.items()}
+
+    for param_name in params:
+        cache[param_name] = beta * cache[param_name] + (1 - beta) * (gradients['d' + param_name] ** 2)
+        params[param_name] -= learning_rate * gradients['d' + param_name] / (np.sqrt(cache[param_name]) + eps)    
+```
+
+
+```python
+##################################
+# Defining model training parameters
+##################################
+epochs = 1001
+learning_rate = 0.01
+```
+
+
+```python
+##################################
+# Implementing the method on
+# Root Mean Square Propagation Optimization
+##################################
+optimizers = ['RMSPROP']
+all_costs = {}
+all_accuracies = {}
+for optimizer in optimizers:
+    params_copy = params.copy()
+    costs, accuracies = train(matrix_x_values, y_values, params_copy, epochs, learning_rate, optimizer)
+    all_costs[optimizer] = costs
+    all_accuracies[optimizer] = accuracies
+```
+
+    Epoch 0: Loss=0.1505920847548153, Accuracy=0.9325153374233128
+    Epoch 100: Loss=0.21546044742901144, Accuracy=0.8957055214723927
+    Epoch 200: Loss=0.21991542558635138, Accuracy=0.8957055214723927
+    Epoch 300: Loss=0.24190084144061785, Accuracy=0.8895705521472392
+    Epoch 400: Loss=0.197519694701527, Accuracy=0.901840490797546
+    Epoch 500: Loss=0.16744501199503276, Accuracy=0.9202453987730062
+    Epoch 600: Loss=0.16407277026857114, Accuracy=0.9202453987730062
+    Epoch 700: Loss=0.17830616454467615, Accuracy=0.9202453987730062
+    Epoch 800: Loss=0.17992251695794698, Accuracy=0.9202453987730062
+    Epoch 900: Loss=0.1808562606429272, Accuracy=0.9202453987730062
+    Epoch 1000: Loss=0.18141333653994732, Accuracy=0.9202453987730062
     
+
+
+```python
+##################################
+# Plotting the cost against iterations for
+# Root Mean Square Propagation Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_costs[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Cost')
+plt.title('RMSPROP Optimization: Cost Function by Iteration')
+plt.ylim(0.15, 0.30)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
+```
+
+
+    
+![png](output_215_0.png)
+    
+
+
+
+```python
+##################################
+# Plotting the classification accuracy against iterations for
+# Root Mean Square Propagation Optimization
+##################################
+plt.figure(figsize=(10, 6))
+for optimizer in optimizers:
+    plt.plot(range(epochs), all_accuracies[optimizer], label=optimizer)
+plt.xlabel('Iterations')
+plt.ylabel('Accuracy')
+plt.title('RMSPROP Optimization: : Classification by Iteration')
+plt.ylim(0.00, 1.00)
+plt.xlim(-50,1000)
+plt.legend([], [], frameon=False)
+plt.show()
+```
+
+
+    
+![png](output_216_0.png)
+    
+
+
+
+```python
+##################################
+# Gathering the final accuracy and cost values for 
+# Root Mean Square Propagation Optimization
+##################################
+
 ```
 
 
 ```python
-
+RMSPROP_metrics = pd.DataFrame(["ACCURACY","LOSS"])
+RMSPROP_values = pd.DataFrame([accuracies[-1],costs[-1]])
+RMSPROP_method = pd.DataFrame(["RMSPROP"]*2)
+RMSPROP_summary = pd.concat([RMSPROP_metrics, 
+                         RMSPROP_values,
+                         RMSPROP_method], axis=1)
+RMSPROP_summary.columns = ['Metric', 'Value', 'Method']
+RMSPROP_summary.reset_index(inplace=True, drop=True)
+display(RMSPROP_summary)
 ```
 
 
-```python
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-```
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Metric</th>
+      <th>Value</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>ACCURACY</td>
+      <td>0.920245</td>
+      <td>RMSPROP</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>LOSS</td>
+      <td>0.181413</td>
+      <td>RMSPROP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
