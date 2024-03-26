@@ -23530,6 +23530,27 @@ class="
 <h3 id="1.6.2-Stochastic-Gradient-Descent-Optimization-">1.6.2 Stochastic Gradient Descent Optimization <a class="anchor" id="1.6.2" /><a class="anchor-link" href="#1.6.2-Stochastic-Gradient-Descent-Optimization-">&#182;</a></h3><p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Backpropagation</a> and <a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Weight Update</a>, in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data.</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Optimization Algorithms</a>, in the context of neural network classification, are methods used to adjust the parameters (weights and biases) of a neural network during the training process in order to minimize a predefined loss function. The primary goal of these algorithms is to optimize the performance of the neural network by iteratively updating its parameters based on the feedback provided by the training data. Optimization algorithms play a critical role in the training of neural networks because they determine how effectively the network learns from the data and how quickly it converges to an optimal solution. These algorithms are significant during model development in improving model accuracy (optimization algorithms help improve the accuracy of neural network models by minimizing the classification error on the training data), enhancing generalization (by minimizing the loss function during training, optimization algorithms aim to generalize well to unseen data, thereby improving the model's ability to make accurate predictions on new inputs), reducing training time (efficient optimization algorithms can accelerate the convergence of the training process, leading to shorter training times for neural networks), handling complex data (since neural networks often deal with high-dimensional and non-linear data, optimization algorithms enable neural networks to effectively learn complex patterns and relationships within the data, leading to improved classification performance) and adapting to variations in data (optimization algorithms can adapt the model's parameters based on variations in the training data, ensuring robustness and stability in the face of different input distributions or data characteristics).</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Stochastic Gradient Descent Optimization</a> (SGD) works by iteratively updating the parameters of the neural network in the direction of the negative gradient of the loss function with respect to the parameters. Unlike traditional gradient descent, which computes the gradient using the entire training dataset, SGD computes the gradient using a single randomly selected sample (or a mini-batch of samples) from the dataset. This randomness introduces noise into the gradient estimates but allows SGD to make frequent updates and converge faster. The SGD process involves initializing the parameters of the neural network randomly, shuffling the training dataset and repeating the following steps until convergence - randomly selecting a sample (or a mini-batch of samples) from the dataset, computing the gradient of the loss function with respect to the parameters using the selected sample(s) and updating the parameters using the gradient and a defined learning rate. SGD demonstrates several advantages over other optimization methods in terms of efficiency (SGD is computationally efficient, especially when dealing with large datasets. It updates the parameters using only a subset of the training data in each iteration, making it suitable for training on datasets with millions or even billions of samples.), regularization (SGD introduces noise into the optimization process, which acts as a form of regularization. This helps prevent overfitting and improves the generalization ability of the neural network, especially in situations with limited training data.), and scalability (SGD scales well to deep neural network architectures with a large number of parameters. It can handle complex models with millions of parameters efficiently, making it suitable for modern deep learning applications.). However, some disadvantages of SGD include the variance in gradient estimates (SGD's reliance on single-sample or mini-batch gradient estimates introduces variance into the optimization process. This variance can lead to noisy updates and slow convergence, especially when using small mini-batch sizes.), sensitivity to learning rate (SGD's performance is sensitive to the choice of learning rate. Setting the learning rate too high may lead to unstable updates and divergence, while setting it too low may result in slow convergence and prolonged training times.), and difficulty in choosing learning rate schedule (SGD requires careful tuning of the learning rate schedule to ensure optimal convergence. Finding the right learning rate schedule can be challenging and may require extensive experimentation.)</p>
+<ol>
+<li>A neural network with the following structure was formulated:<ul>
+<li><span style="color: #FF0000">Hidden Layer</span> = 3</li>
+<li><span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 5</li>
+</ul>
+</li>
+<li>The backpropagation and optimization algorithms were implemented with parameter settings described as follows:<ul>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
+<li><span style="color: #FF0000">Epochs</span> = 1000</li>
+<li><span style="color: #FF0000">Hidden Layer Activation Function</span> = Sigmoid Activation Function</li>
+<li><span style="color: #FF0000">Output Layer Activation Function</span> = Softmax Activation Function</li>
+<li><span style="color: #FF0000">Loss Function Optimization Method</span> = Stochastic Gradient Descent (SGD)</li>
+</ul>
+</li>
+<li>The final loss estimate determined as 0.18713 at the 1000th epoch was not optimally low as compared to those obtained using the other optimization methods.</li>
+<li>Applying parameter updates using an SGD cost function optimization, the neural network model performance is estimated as follows:<ul>
+<li><span style="color: #FF0000">Accuracy</span> = 92.63804</li>
+</ul>
+</li>
+<li>The estimated classification accuracy using the SGD cost function optimization was not optimal as compared to those obtained using the other optimization methods. </li>
+</ol>
 
 </div>
 </div>
@@ -24085,6 +24106,30 @@ class="
 <h3 id="1.6.3-Adaptive-Moment-Estimation-Optimization-">1.6.3 Adaptive Moment Estimation Optimization <a class="anchor" id="1.6.3" /><a class="anchor-link" href="#1.6.3-Adaptive-Moment-Estimation-Optimization-">&#182;</a></h3><p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Backpropagation</a> and <a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Weight Update</a>, in the context of an artificial neural network, involve the process of iteratively adjusting the weights of the connections between neurons in the network to minimize the difference between the predicted and the actual target responses. Input data is fed into the neural network, and it propagates through the network layer by layer, starting from the input layer, through hidden layers, and ending at the output layer. At each neuron, the weighted sum of inputs is calculated, followed by the application of an activation function to produce the neuron's output. Once the forward pass is complete, the network's output is compared to the actual target output. The difference between the predicted output and the actual output is quantified using a loss function, which measures the discrepancy between the predicted and actual values. Common loss functions for classification tasks include cross-entropy loss. During the backward pass, the error is propagated backward through the network to compute the gradients of the loss function with respect to each weight in the network. This is achieved using the chain rule of calculus, which allows the error to be decomposed and distributed backward through the network. The gradients quantify how much a change in each weight would affect the overall error of the network. Once the gradients are computed, the weights are updated in the opposite direction of the gradient to minimize the error. This update is typically performed using an optimization algorithm such as gradient descent, which adjusts the weights in proportion to their gradients and a learning rate hyperparameter. The learning rate determines the size of the step taken in the direction opposite to the gradient. These steps are repeated for multiple iterations (epochs) over the training data. As the training progresses, the weights are adjusted iteratively to minimize the error, leading to a neural network model that accurately classifies input data. This activation function is commonly used in the output layer for binary classification problems.</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Optimization Algorithms</a>, in the context of neural network classification, are methods used to adjust the parameters (weights and biases) of a neural network during the training process in order to minimize a predefined loss function. The primary goal of these algorithms is to optimize the performance of the neural network by iteratively updating its parameters based on the feedback provided by the training data. Optimization algorithms play a critical role in the training of neural networks because they determine how effectively the network learns from the data and how quickly it converges to an optimal solution. These algorithms are significant during model development in improving model accuracy (optimization algorithms help improve the accuracy of neural network models by minimizing the classification error on the training data), enhancing generalization (by minimizing the loss function during training, optimization algorithms aim to generalize well to unseen data, thereby improving the model's ability to make accurate predictions on new inputs), reducing training time (efficient optimization algorithms can accelerate the convergence of the training process, leading to shorter training times for neural networks), handling complex data (since neural networks often deal with high-dimensional and non-linear data, optimization algorithms enable neural networks to effectively learn complex patterns and relationships within the data, leading to improved classification performance) and adapting to variations in data (optimization algorithms can adapt the model's parameters based on variations in the training data, ensuring robustness and stability in the face of different input distributions or data characteristics).</p>
 <p><a href="https://link.springer.com/book/10.1007/978-0-387-84858-7">Adaptive Moment Estimation Optimization</a> (Adam) combines both momentum-based methods and adaptive learning rate methods by maintaining exponentially decaying moving averages of past gradients and their squares, which are then used to adaptively adjust the learning rates for each parameter. The Adam process involves initializing the parameters, including the first and second moment estimates (m and v) to zero. In each iteration of training which is repeated until convergence or a predetermined number of iterations, the gradients of the loss function with respect to the parameters are computed, the biased first and second moment estimates are sequentially determined, the bias in the first and second moment estimates are corrected and the model parameters are subsequently updated. Adam demonstrates several advantages over other optimization methods in terms of adaptive learning rates (Adam adapts the learning rates for each parameter individually, making it less sensitive to manual tuning of learning rate hyperparameters compared to SGD and RMSprop), efficient convergence (Adam often converges faster than SGD and RMSprop, especially in the presence of sparse gradients or non-stationary objectives.), and robustness to noisy gradients (Adam's adaptive learning rate mechanism and momentum-like updates make it more robust to noisy gradients compared to SGD and AdaGrad.). However, some disadvantages of Adam include memory and computational cost (Adam requires additional memory and computation to maintain the moving average estimates of the gradients and their squares. This can increase the computational overhead, especially for large-scale neural networks.), sensitivity to hyperparameters (although Adam is less sensitive to learning rate hyperparameters compared to SGD, it still requires tuning of other hyperparameters such as the momentum parameters, and potential overfitting (In some cases, Adam may exhibit aggressive updates, leading to overfitting, especially when the momentum parameters are not properly tuned.).</p>
+<ol>
+<li>A neural network with the following structure was formulated:<ul>
+<li><span style="color: #FF0000">Hidden Layer</span> = 3</li>
+<li><span style="color: #FF0000">Number of Nodes per Hidden Layer</span> = 5</li>
+</ul>
+</li>
+<li>The backpropagation and optimization algorithms were implemented with parameter settings described as follows:<ul>
+<li><span style="color: #FF0000">Learning Rate</span> = 0.01</li>
+<li><span style="color: #FF0000">Epochs</span> = 1000</li>
+<li><span style="color: #FF0000">Hidden Layer Activation Function</span> = Sigmoid Activation Function</li>
+<li><span style="color: #FF0000">Output Layer Activation Function</span> = Softmax Activation Function</li>
+<li><span style="color: #FF0000">Loss Function Optimization Method</span> = Adaptive Moment Estimation (ADAM)</li>
+<li><span style="color: #FF0000">Beta1 (Exponential Decay Rate for First Moment)</span> = 0.900</li>
+<li><span style="color: #FF0000">Beta2 (Exponential Decay Rate for Second Moment)</span> = 0.999</li>
+<li><span style="color: #FF0000">Epsilon (Constant to Maintain Numerical Stability During Update)</span> = 1e-8</li>
+</ul>
+</li>
+<li>The final loss estimate determined as 0.17663 at the 1000th epoch was not optimally low as compared to those obtained using the other optimization methods.</li>
+<li>Applying parameter updates using an ADAM cost function optimization, the neural network model performance is estimated as follows:<ul>
+<li><span style="color: #FF0000">Accuracy</span> = 91.41104</li>
+</ul>
+</li>
+<li>The estimated classification accuracy using the ADAM cost function optimization was not optimal as compared to those obtained using the other optimization methods. </li>
+</ol>
 
 </div>
 </div>
@@ -25739,7 +25784,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[194]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[193]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
@@ -25901,7 +25946,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[195]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[194]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
@@ -25929,7 +25974,7 @@ class="
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[195]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[194]:</div>
 
 
 
@@ -26010,7 +26055,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[196]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[195]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
@@ -26065,7 +26110,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[197]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[196]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
@@ -26093,7 +26138,7 @@ class="
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[197]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[196]:</div>
 
 
 
@@ -26174,7 +26219,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[198]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[197]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
@@ -26401,7 +26446,7 @@ class="
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[193]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[198]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
