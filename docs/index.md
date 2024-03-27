@@ -2,7 +2,7 @@
 # Supervised Learning : Comparing Optimization Algorithms in Parameter Updates and Loss Function Minimization for Neural Network Classification 
 
 ***
-### John Pauline Pineda <br> <br> *March 30, 2024*
+### John Pauline Pineda <br> <br> *March 27, 2024*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -37,7 +37,7 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project manually implements the **Sigmoid**, **Rectified Linear Unit**, **Leaky Rectified Linear Unit**, **Exponential Linear Unit**, **Scaled Exponential Linear Unit** and **Randomized Leaky Rectified Linear Unit** activation functions using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and iteration count parameters to optimally update the gradients and weights of an artificial neural network classification model. The gradient, weight, cost function and classification accuracy optimization profiles of the different activation settings were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
+This project manually implements the **Stochastic Gradient Descent Optimization**, **Adaptive Moment Estimation Optimization**, **Adaptive Gradient Optimization**, **AdaDelta Optimization**, **Layer-wise Optimized Non-convex Optimization** and **Root Mean Square Propagation Optimization** algorithms using various helpful packages in <mark style="background-color: #CCECFF"><b>Python</b></mark> with fixed values applied for the learning rate and iteration count parameters to optimally update the gradients and weights of an artificial neural network classification model. The cost function and classification accuracy optimization profiles of the different optimization algorithms were compared. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document.
 
 [Artificial Neural Network](https://link.springer.com/book/10.1007/978-0-387-84858-7), in the context of categorical response prediction, consists of interconnected nodes called neurons organized in layers. The model architecture involves an input layer which receives the input data, with each neuron representing a feature or attribute of the data; hidden layers which perform computations on the input data through weighted connections between neurons and apply activation functions to produce outputs; and the output layer which produces the final predictions equal to the number of classes, each representing the probability of the input belonging to a particular class, based on the computations performed in the hidden layers. Neurons within adjacent layers are connected by weighted connections. Each connection has an associated weight that determines the strength of influence one neuron has on another. These weights are adjusted during the training process to enable the network to learn from the input data and make accurate predictions. Activation functions introduce non-linearities into the network, allowing it to learn complex relationships between inputs and outputs. The training process involves presenting input data along with corresponding target outputs to the network and adjusting the weights to minimize the difference between the predicted outputs and the actual targets which is typically performed through optimization algorithms such as gradient descent and backpropagation. The training process iteratively updates the weights until the model's predictions closely match the target outputs.
 
@@ -6722,6 +6722,9 @@ display(RMSPROP_summary)
 
 ## 1.7. Consolidated Findings <a class="anchor" id="1.7"></a>
 
+1. While all models showed comparably high classification accuracy, this optimization algorithm model demonstrated the lowest estimated cost values leading to the best discrimination between the dichotomous response.
+    * <span style="color: #FF0000">LION</span> = Layer-wise Optimized Non-convex Optimization              
+2. The choice of **Optimization Algorithm** can have a significant impact on the performance and training dynamics of a neural network classification model in terms of generalization ability, convergence speed, noise robustness, learning rate sensitivity, computational efficiency and training stability. The most appropriate algorithm should be carefully considered based on the specific characteristics of the dataset, model architecture, computational resources, and desired training objectives. Experimentation and empirical validation are often necessary to determine the most suitable optimization algorithm for a given neural network classification task.
 
 
 
@@ -7055,7 +7058,7 @@ plt.show()
 # 2. Summary <a class="anchor" id="Summary"></a>
 
 
-
+![Project49_Summary.png](attachment:ac057eaa-b240-4d7e-a391-52ed03b3ae5e.png)
 
 # 3. References <a class="anchor" id="References"></a>
 
